@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Mapa interativo mostrando a localização dos GCEUs da Igreja IMW Gericinó."
+    />
+    <meta name="keywords" content="GCEU, IMW Gericinó, mapa, localização" />
+    <meta name="author" content="Sua Organização" />
+    <title>Mapa Interativo - GCEU IMW Gericinó</title>
+    <link rel="shortcut icon" href="img/logoIMG.png" type="image/png" />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Link para o CSS do Leaflet -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+
+    <!-- Script do Leaflet -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <ul>
+          <li>
+            <a href="#disponibilidadeGCEU" aria-label="Ver GCEUs Disponíveis"
+              >GCEUs Disponíveis</a
+            >
+          </li>
+          <li>
+            <a href="#mapSection" aria-label="Localizações dos GCEUs"
+              >Localizações</a
+            >
+          </li>
+          <li>
+            <a href="#sobreIgreja" aria-label="Conheça a Igreja IMW Gericinó"
+              >Sobre a Igreja</a
+            >
+          </li>
+          <li>
+            <a href="#adicionarGCEU" aria-label="Adicionar um novo GCEU"
+              >Adicionar GCEU</a
+            >
+          </li>
+        </ul>
+      </nav>
+    </header>
+    <main>
+      <h1>Mapa Interativo dos GCEUs - IMW Gericinó</h1>
+      <section id="mapSection" aria-labelledby="mapa-gceus">
+        <h2 id="mapa-gceus">Mapa de Localização</h2>
+        <div id="map" aria-label="Mapa interativo mostrando os GCEUs"></div>
+      </section>
+      <section id="dadosGCEU">
+        <h2>Dados do GCEU</h2>
+        <p><strong>Nome:</strong> <span id="nomeGCEU">Exemplo</span></p>
+        <p><strong>Local:</strong> <span id="localGCEU">Rua X, 123</span></p>
+        <p>
+          <strong>Horário:</strong> <span id="horarioGCEU">19h às 21h</span>
+        </p>
+        <p>
+          <strong>Contato:</strong>
+          <span id="telefoneGCEU">+55 21 99999-9999</span>
+        </p>
+      </section>
+      <!-- Seção de GCEU para visualização das informações -->
+      <section id="disponibilidadeGCEU">
+        <h2>Disponibilidade dos GCEUs</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>GCEU</th>
+              <th>Disponibilidade</th>
+            </tr>
+          </thead>
+          <tbody id="tabelaGCEUs">
+            <!-- GCEUs adicionados aparecerão aqui -->
+          </tbody>
+        </table>
+      </section>
+      <section id="adicionarGCEU">
+        <h2>Adicionar Novo GCEU</h2>
+        <form id="formEditarGCEU">
+          <fieldset>
+            <legend>Informações do GCEU</legend>
+            <label for="nomeGCEU">Nome do GCEU:</label>
+            <input
+              type="text"
+              id="nomeGCEU"
+              name="nome"
+              required
+              aria-describedby="nomeGCEUDesc"
+              placeholder="Nome do GCEU"
+            />
+            <small id="nomeGCEUDesc">Digite o nome do GCEU.</small>
+            <br />
+            <label for="localGCEU">Local:</label>
+            <input
+              type="text"
+              id="localGCEU"
+              name="local"
+              required
+              aria-describedby="localGCEUDesc"
+              placeholder="Local"
+            />
+            <small id="localGCEUDesc">Informe o endereço completo.</small>
+            <br />
+            <label for="horarioGCEU">Horário:</label>
+            <input
+              type="text"
+              id="horarioGCEU"
+              name="horario"
+              required
+              aria-describedby="horarioGCEUDesc"
+              placeholder="Descrição do seu GCEU"
+            />
+            <small id="horarioGCEUDesc">Exemplo: 19h às 21h.</small>
+            <br />
+            <label for="latitudeGCEU">Latitude:</label>
+            <input
+              type="number"
+              id="latitudeGCEU"
+              name="latitude"
+              step="any"
+              required
+              aria-describedby="latitudeGCEUDesc"
+              placeholder="Latitude do GCEU"
+            />
+            <br />
+            <label for="longitudeGCEU">Longitude:</label>
+            <input
+              type="number"
+              id="longitudeGCEU"
+              name="longitude"
+              step="any"
+              required
+              aria-describedby="longitudeGCEUDesc"
+              placeholder="Longitude do GCEU"
+            />
+            <br />
+            <button type="submit">Salvar alterações</button>
+            <button type="button" id="removerGCEU">Remover GCEU</button>
+          </fieldset>
+        </form>
+      </section>
+    </main>
+    <footer>
+      <p>&copy; 2024 GCEU - Todos os direitos reservados.</p>
+    </footer>
+  </body>
+</html>
