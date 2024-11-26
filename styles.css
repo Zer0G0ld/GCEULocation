@@ -159,43 +159,7 @@ footer {
 
 /* ===== Responsividade ===== */
 @media (max-width: 768px) {
-    header nav ul {/* ===== Reset Básico ===== */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-/* ===== Variáveis CSS ===== */
-:root {
-    --primary-color: #333;
-    --secondary-color: #555;
-    --background-color: #f9f9f9;
-    --text-color: #333;
-    --white: #fff;
-    --highlight-color: #007bff;
-    --spacing: 10px;
-    --radius: 8px;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* ===== Estilos Globais ===== */
-body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
-    background-color: var(--background-color);
-    color: var(--text-color);
-}
-
-/* ===== Header e Navegação ===== */
-header {
-    background-color: rgba(51, 51, 51, 0.9);
-    padding: var(--spacing);
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-
+    header nav ul {
         flex-direction: column;
         gap: 5px;
     }
