@@ -19,8 +19,10 @@ jobs:
           touch out/.nojekyll
           cd out
           git init
+          git checkout --orphan gh-pages
           git config user.name "GitHub Action"
           git config user.email "matheus321trabalho@gmail.com"
+          echo "node_modules/" > .gitignore
           git add .
           git commit -m "Deploy to GitHub Pages"
-          git push --force "https://${{ secrets.GITHUB_TOKEN }}@github.com/Zer0G0lld/GCEULocation.git" master:gh-pages
+          git push --force "https://${{ secrets.GITHUB_TOKEN }}@github.com/Zer0G0lld/GCEULocation.git" gh-pages
