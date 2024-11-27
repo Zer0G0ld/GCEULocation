@@ -36,6 +36,12 @@ Este projeto tem como objetivo criar um mapa interativo para a Igreja IMW Gerici
   - Uso de variáveis CSS para cores, espaçamentos e bordas.
   - Layout flexível e responsivo para garantir uma boa experiência em dispositivos móveis.
 
+- **Backend**:
+  - **Node.js** e **Express.js** para criar o servidor e as rotas da API.
+  - **PostgreSQL** como banco de dados para armazenar as informações dos GCEUs.
+  - **pg** (biblioteca Node.js) para interagir com o banco de dados PostgreSQL.
+  - **dotenv** para gerenciar variáveis de ambiente (como as credenciais do banco de dados).
+
 ## Estrutura de Arquivos
 
 ```bash
@@ -71,8 +77,8 @@ Para executar o projeto localmente, basta seguir os passos abaixo:
    cd GCEULocation
    ```
 
-3. Instale as dependencias:
-   ```nodejs
+3. Instale as dependências:
+   ```bash
    npm install
    npm install cors
    npm install express
@@ -80,19 +86,31 @@ Para executar o projeto localmente, basta seguir os passos abaixo:
    npm install pg@latest
    npm list pg
    ```
-4. Inicie o backend:
 
-```bash
-cd backend
-node app.js
-```
+4. Configure o banco de dados:
+   - Crie um banco de dados no PostgreSQL e adicione as tabelas necessárias.
+   - No arquivo `.env`, defina as variáveis de ambiente para conectar ao banco de dados:
+   
+   ```env
+   DB_HOST=localhost
+   DB_PORT=5432
+   DB_USER=seu_usuario
+   DB_PASSWORD=sua_senha
+   DB_NAME=seu_banco_de_dados
+   ```
 
-5. Verifique o frontend:
-```bash
-cd frontend
-```
+5. Inicie o backend:
+   ```bash
+   cd backend
+   node app.js
+   ```
 
-6. Se quiser fazer alterações, abra o projeto em um editor de código (recomendo [VSCode](https://code.visualstudio.com/)) e edite os arquivos conforme necessário.
+6. Verifique o frontend:
+   ```bash
+   cd frontend
+   ```
+
+7. Se quiser fazer alterações, abra o projeto em um editor de código (recomendo [VSCode](https://code.visualstudio.com/)) e edite os arquivos conforme necessário.
 
 ## Próximos Passos
 
