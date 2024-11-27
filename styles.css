@@ -1,4 +1,4 @@
-/* ===== Reset Básico ===== */
+/* ===== Reset Básico ===== */ 
 * {
     margin: 0;
     padding: 0;
@@ -7,12 +7,12 @@
 
 /* ===== Variáveis CSS ===== */
 :root {
-    --primary-color: #333;
-    --secondary-color: #555;
-    --background-color: #f9f9f9;
-    --text-color: #333;
+    --primary-color: #8E44AD; /* Roxo real */
+    --secondary-color: #F1C40F; /* Amarelo dourado */
+    --background-color: #FFFFFF; /* Branco puro */
+    --text-color: #2C3E50; /* Cinza profundo */
     --white: #fff;
-    --highlight-color: #007bff;
+    --highlight-color: #E67E22; /* Laranja */
     --spacing: 10px;
     --radius: 8px;
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -28,7 +28,7 @@ body {
 
 /* ===== Header e Navegação ===== */
 header {
-    background-color: rgba(51, 51, 51, 0.9);
+    background-color: var(--primary-color);
     padding: var(--spacing);
     position: fixed;
     top: 0;
@@ -63,6 +63,7 @@ header nav ul li a:hover {
 
 header nav ul li a.active {
     background-color: var(--secondary-color);
+    color: var(--primary-color);
 }
 
 /* ===== Conteúdo Principal ===== */

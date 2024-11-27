@@ -1,115 +1,134 @@
+// Função que gerencia o evento de clique para fechar a barra de navegação
+document.addEventListener("click", function (event) {
+  const navbarToggler = document.querySelector(".navbar-toggler");
+  const navbarCollapse = document.querySelector(".navbar-collapse");
+
+  if (navbarCollapse.classList.contains("show") && !navbarCollapse.contains(event.target) && !navbarToggler.contains(event.target)) {
+    navbarToggler.click();
+  }
+});
+
+// Função assíncrona que inicializa o mapa
+async function initMap() {
+  const map = L.map("map").setView([-22.9068, -43.1729], 12);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    attribution: "© OpenStreetMap contributors",
+  }).addTo(map);
+
+  // Adicionar controles de zoom e geolocalização
+  L.control.zoom().addTo(map);
+  L.control.locate().addTo(map);
+
+  return map;
+}
+
+// Função assíncrona para geocodificar o endereço
+async function geocodeAddress(address) {
+  const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data && data.length > 0) {
+      return { lat: parseFloat(data[0].lat), lng: parseFloat(data[0].lon) };
+    }
+    throw new Error("Endereço não encontrado.");
+  } catch (error) {
+    console.error("Erro na geocodificação:", error);
+    return null;
+  }
+}
+
+// Função para adicionar marcador no mapa
+function addMarker(map, location) {
+  if (!location.lat || !location.lng) {
+    console.warn("Coordenadas inválidas para o marcador:", location);
+    return;
+  }
+
+  const marker = L.marker([location.lat, location.lng]).addTo(map);
+  marker.bindPopup(`
+    <b>${location.name}</b>
+    <br>
+    <p>${location.local}</p>
+    <p>Horário: ${location.horario}</p>
+  `);
+
+  location.marker = marker;
+}
+
+// Função para adicionar um GCEU à tabela e exibir os detalhes
+function adicionarGCEUTabela(gceu) {
+  const tabela = document.getElementById("tabelaGCEUs");
+  const novaLinha = document.createElement("tr");
+  novaLinha.innerHTML = `
+    <td>${gceu.name}</td>
+    <td>Disponível</td>
+  `;
+  tabela.appendChild(novaLinha);
+
+  const dadosGCEU = document.getElementById("dadosGCEU");
+  dadosGCEU.innerHTML = `
+    <h3>${gceu.name}</h3>
+    <p>Local: ${gceu.local}</p>
+    <p>Horário: ${gceu.horario}</p>
+  `;
+}
+
+// Função principal assíncrona para inicializar o sistema
 (async function () {
   try {
-    const gceus = []; // Lista de GCEUs cadastrados
+    const gceus = [];
+    const map = await initMap();
 
-    function initMap() {
-      console.log("Inicializando o mapa...");
-      const map = L.map("map").setView([-22.9068, -43.1729], 12); // Centro inicial no Rio de Janeiro
+    // Dados iniciais de GCEUs
+    const gceusDados = [
+      { name: "GCEU Centro", local: "Centro", horario: "19h às 21h", endereco: "Rua X, 123" },
+      { name: "GCEU Zona Norte", local: "Zona Norte", horario: "18h às 20h", endereco: "Rua Y, 456" }
+    ];
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "© OpenStreetMap contributors",
-      }).addTo(map);
-
-      return map;
-    }
-
-    function isValidLocation(location) {
-      return (
-        typeof location.name === "string" &&
-        location.name.trim() &&
-        typeof location.lat === "number" &&
-        typeof location.lng === "number"
-      );
-    }
-
-    function addMarker(map, location) {
-      if (!isValidLocation(location)) {
-        console.warn("Dados inválidos para o marcador:", location);
-        return;
+    // Geocodificação e adição de marcadores no mapa para cada GCEU
+    for (const gceu of gceusDados) {
+      const location = await geocodeAddress(gceu.endereco);
+      if (location) {
+        addMarker(map, { ...gceu, ...location });
+        adicionarGCEUTabela(gceu);
       }
-
-      const marker = L.marker([location.lat, location.lng]).addTo(map);
-      marker.bindPopup(`
-        <b>${location.name}</b>
-        <br>
-        <p>${location.local}</p>
-        <p>Horário: ${location.horario}</p>
-      `);
-
-      location.marker = marker;
     }
 
-    function adicionarGCEUTabela(gceu) {
-      const tabela = document.getElementById("tabelaGCEUs");
-      const novaLinha = document.createElement("tr");
-      novaLinha.innerHTML = `
-        <td>${gceu.name}</td>
-        <td>Disponível</td>
-      `;
-      tabela.appendChild(novaLinha);
-
-      const dadosGCEU = document.getElementById("dadosGCEU");
-      dadosGCEU.innerHTML = `
-        <h2>Dados do GCEU: ${gceu.name}</h2>
-        <p><strong>Nome:</strong> ${gceu.name}</p>
-        <p><strong>Local:</strong> ${gceu.local}</p>
-        <p><strong>Horário:</strong> ${gceu.horario}</p>
-      `;
-    }
-
-    const map = initMap();
-
-    gceus.push({
-      name: "GCEU 1",
-      lat: -22.9101,
-      lng: -43.2094,
-      local: "Rua X, 123",
-      horario: "19h às 21h",
-    });
-    gceus.push({
-      name: "GCEU 2",
-      lat: -22.915,
-      lng: -43.175,
-      local: "Rua Y, 456",
-      horario: "18h às 20h",
-    });
-
-    gceus.forEach((gceu) => {
-      addMarker(map, gceu);
-      adicionarGCEUTabela(gceu);
-    });
-
-    document.getElementById("formAdicionarGCEU").addEventListener("submit", function (event) {
+    // Função para adicionar um novo GCEU
+    document.getElementById("formAdicionarGCEU").addEventListener("submit", async function (event) {
       event.preventDefault();
 
       const nome = document.getElementById("nomeGCEUAdicionar").value;
       const local = document.getElementById("localGCEUAdicionar").value;
       const horario = document.getElementById("horarioGCEUAdicionar").value;
       const endereco = document.getElementById("enderecoGCEUAdicionar").value;
-      const latitude = parseFloat(document.getElementById("latitudeGCEUAdicionar").value);
-      const longitude = parseFloat(document.getElementById("longitudeGCEUAdicionar").value);
 
-      const novoGCEU = { name: nome, local, horario, endereco, lat: latitude, lng: longitude };
+      // Log para verificar os dados do formulário
+      console.log("Dados do novo GCEU:", nome, local, horario, endereco);
 
-      gceus.push(novoGCEU);
-      addMarker(map, novoGCEU);
-      adicionarGCEUTabela(novoGCEU);
-    });
+      // Geocodificando o endereço
+      const location = await geocodeAddress(endereco);
+      if (location) {
+        const novoGCEU = { name: nome, local, horario, endereco, lat: location.lat, lng: location.lng };
 
-    document.getElementById("removerGCEU").addEventListener("click", function () {
-      const nomeGCEU = document.getElementById("nomeGCEUAdicionar").value;
-      const index = gceus.findIndex(gceu => gceu.name === nomeGCEU);
-      
-      if (index !== -1) {
-        gceus[index].marker.remove();
-        gceus.splice(index, 1);
-        alert(`GCEU ${nomeGCEU} removido!`);
+        // Log para verificar se o novo GCEU foi criado corretamente
+        console.log("Novo GCEU adicionado:", novoGCEU);
+
+        // Adiciona o novo GCEU ao array e à tabela
+        gceus.push(novoGCEU);
+        addMarker(map, novoGCEU);
+        adicionarGCEUTabela(novoGCEU);
+
+        // Limpa o formulário após o envio
+        document.getElementById("formAdicionarGCEU").reset();
       } else {
-        alert("GCEU não encontrado!");
+        console.error("Erro ao adicionar GCEU: Endereço não encontrado.");
       }
     });
+
   } catch (error) {
-    console.error("Erro ao carregar o mapa ou dados:", error);
+    console.error("Erro inicializando o mapa ou GCEUs:", error);
   }
 })();
