@@ -87,10 +87,12 @@ Para executar o projeto localmente, basta seguir os passos abaixo:
    npm list pg
    ```
 
-4. Configure o banco de dados:
+---
+
+### 4. Configure o banco de dados:
    - Crie um banco de dados no PostgreSQL e adicione as tabelas necessárias.
    - No arquivo `.env`, defina as variáveis de ambiente para conectar ao banco de dados:
-   
+
    ```env
    DB_HOST=localhost
    DB_PORT=5432
@@ -98,6 +100,108 @@ Para executar o projeto localmente, basta seguir os passos abaixo:
    DB_PASSWORD=sua_senha
    DB_NAME=seu_banco_de_dados
    ```
+
+### PostgreSQL no Termux:
+Para criar e configurar um banco de dados PostgreSQL no Termux, siga os passos abaixo:
+
+### Passo 1: Instalar o PostgreSQL no Termux
+1. **Atualize os pacotes do Termux:**
+   ```bash
+   pkg update && pkg upgrade
+   ```
+
+2. **Instale o PostgreSQL:**
+   ```bash
+   pkg install postgresql
+   ```
+
+### Passo 2: Inicializar o PostgreSQL
+1. **Inicialize o diretório de dados do PostgreSQL:**
+   ```bash
+   initdb $PREFIX/var/lib/postgresql
+   ```
+
+2. **Inicie o servidor PostgreSQL:**
+   ```bash
+   pg_ctl -D $PREFIX/var/lib/postgresql start
+   ```
+
+### Passo 3: Criar um banco de dados
+1. **Acesse o shell do PostgreSQL:**
+   Caso o comando `psql` retorne o erro abaixo:
+
+   ```bash
+   ~/GCEULocation $ psql
+   2024-11-27 08:39:06.849 -03 [5410] FATAL:  database "u0_a408" does not exist
+   psql: error: connection to server on socket "/data/data/com.termux/files/usr/tmp/.s.PGSQL.5432" failed: FATAL:  database "u0_a408" does not exist
+   ```
+
+   **Solução:**
+   Conecte-se ao banco de dados padrão `postgres` (ou `template1`):
+
+   ```bash
+   psql -d postgres
+   ```
+
+2. **Crie um novo banco de dados (substitua `meubanco` pelo nome desejado):**
+   ```sql
+   CREATE DATABASE gceu;
+   ```
+
+3. **Conecte-se ao banco de dados recém-criado:**
+   ```sql
+   \c gceu
+   ```
+
+### Passo 4: Criar usuário e conceder privilégios (opcional)
+1. **Crie um usuário (substitua `meuusuario` e `minhasenha`):**
+   ```sql
+   CREATE USER gceu WITH PASSWORD 'minhasenha';
+   ```
+
+2. **Conceda privilégios ao usuário no banco de dados:**
+   ```sql
+   GRANT ALL PRIVILEGES ON DATABASE gceu TO gceu;
+   ```
+
+### Passo 5: Criar tabelas (exemplo)
+1. **Exemplo de criação de uma tabela `gceus`:**
+   ```sql
+   CREATE TABLE gceus (
+     id SERIAL PRIMARY KEY,
+     nome VARCHAR(255) NOT NULL,
+     endereco VARCHAR(255) NOT NULL,
+     hora TIME,
+     descricao TEXT,
+     data_inicio DATE
+   );
+   ```
+
+2. **Inserir dados de exemplo:**
+   ```sql
+   INSERT INTO gceus (nome, endereco, hora, descricao, data_inicio)
+   VALUES ('GCEU Central', 'Rua Exemplo, 123', '14:00', 'Descrição do GCEU', '2024-11-27');
+   ```
+
+### Passo 6: Sair do psql
+Para sair do shell `psql`, use o comando:
+```sql
+\q
+```
+
+### Passo 7: Parar o servidor PostgreSQL
+Se quiser parar o servidor, use o comando:
+```bash
+pg_ctl -D $PREFIX/var/lib/postgresql stop
+```
+
+### Dicas:
+- Para iniciar o PostgreSQL automaticamente ao abrir o Termux, você pode adicionar o comando de inicialização ao `.bashrc` ou `.zshrc`:
+  ```bash
+  pg_ctl -D $PREFIX/var/lib/postgresql start
+  ```
+
+---
 
 5. Inicie o backend:
    ```bash
@@ -109,6 +213,8 @@ Para executar o projeto localmente, basta seguir os passos abaixo:
    ```bash
    cd frontend
    ```
+Sobre as coordenadas eu conseguir usando o arquivo GeoLol.js usando a api da geoapify
+
 
 7. Se quiser fazer alterações, abra o projeto em um editor de código (recomendo [VSCode](https://code.visualstudio.com/)) e edite os arquivos conforme necessário.
 

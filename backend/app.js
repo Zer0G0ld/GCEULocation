@@ -23,18 +23,18 @@ const getGCEUs = async (req, res) => {
 
 // Função para adicionar um novo GCEU
 const adicionarGCEU = async (req, res) => {
-  const { nome, endereco, local, descricao, dataInicio } = req.body;
+  const { nome, endereco, descricao, dataInicio } = req.body;
 
-  if (!nome || !endereco || !local || !descricao || !dataInicio) {
+  if (!nome || !endereco || !descricao || !dataInicio) {
     return res.status(400).send("Todos os campos são obrigatórios.");
   }
 
   try {
     const queryText = `
-      INSERT INTO gceus (name, local, endereco, descricao, data_inicio)
-      VALUES ($1, $2, $3, $4, $5) RETURNING *;
+      INSERT INTO gceus (name, endereco, descricao, data_inicio)
+      VALUES ($1, $2, $3, $4) RETURNING *;
     `;
-    const values = [nome, local, endereco, descricao, dataInicio];
+    const values = [nome, endereco, descricao, dataInicio];
     const result = await query(queryText, values);
 
     res.status(201).json(result.rows[0]); // Retorna o GCEU criado
@@ -43,6 +43,7 @@ const adicionarGCEU = async (req, res) => {
     res.status(500).send("Erro ao adicionar GCEU.");
   }
 };
+
 
 // Rota para obter os GCEUs
 app.get('/gceus', getGCEUs);
