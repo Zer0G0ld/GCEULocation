@@ -38,13 +38,23 @@ Este projeto tem como objetivo criar um mapa interativo para a Igreja IMW Gerici
 
 ## Estrutura de Arquivos
 
-```
-/project-root
-├── index.html        # Arquivo principal HTML
-├── styles.css        # Estilos principais do projeto
-├── script.js         # Lógica JavaScript (interação com o mapa e formulários)
-├── img/              # Imagens, como o ícone da página
-└── README.md         # Este arquivo
+```bash
+/GCEULocation
+├── backend
+│   ├── app.js              # Servidor Express e configuração das rotas
+│   ├── config
+│   │   └── database.js     # Conexão com o PostgreSQL
+│   └── script.js           # Lógica de controle (ex: obter pacientes)
+├── frontend
+│   ├── img
+│   │   ├── logoIMG.png
+│   │   └── logo.png
+│   ├── index.html          # HTML do frontend
+│   ├── script.js           # Lógica do frontend (ex: requisição aos pacientes)
+│   └── styles.css          # Estilos do frontend
+├── .env                    # Configurações sensíveis (ex: senha do banco)
+├── package.json            # Gerenciador de dependências
+└── package-lock.json       # Lockfile do npm
 ```
 
 ## Como Rodar o Projeto
@@ -53,20 +63,36 @@ Para executar o projeto localmente, basta seguir os passos abaixo:
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/projeto-gceus.git
+   git clone https://github.com/Zer0G0ld/GCEULocation.git
    ```
 
 2. Navegue até o diretório do projeto:
    ```bash
-   cd projeto-gceus
+   cd GCEULocation
    ```
 
-3. Abra o arquivo `index.html` no seu navegador preferido:
-   ```bash
-   open index.html
+3. Instale as dependencias:
+   ```nodejs
+   npm install
+   npm install cors
+   npm install express
+   npm install dotenv
+   npm install pg@latest
+   npm list pg
    ```
+4. Inicie o backend:
 
-4. Se quiser fazer alterações, abra o projeto em um editor de código (recomendo [VSCode](https://code.visualstudio.com/)) e edite os arquivos conforme necessário.
+```bash
+cd backend
+node app.js
+```
+
+5. Verifique o frontend:
+```bash
+cd frontend
+```
+
+6. Se quiser fazer alterações, abra o projeto em um editor de código (recomendo [VSCode](https://code.visualstudio.com/)) e edite os arquivos conforme necessário.
 
 ## Próximos Passos
 
@@ -104,4 +130,4 @@ Se você deseja contribuir para este projeto, sinta-se à vontade para fazer um 
 
 ## Licença
 
-Este projeto está licenciado sob a [MIT License](LICENSE).
+Este projeto está licenciado sob a [Apache](LICENSE).
