@@ -85,6 +85,7 @@ Para executar o projeto localmente, basta seguir os passos abaixo:
    npm install dotenv
    npm install pg@latest
    npm list pg
+   npm install mongoose
    ```
 
 ---
@@ -200,6 +201,131 @@ pg_ctl -D $PREFIX/var/lib/postgresql stop
   ```bash
   pg_ctl -D $PREFIX/var/lib/postgresql start
   ```
+
+## Configurar PostgreSQL no Linux e Windows
+
+### **1. Instalar o PostgreSQL**
+
+#### **Linux:**
+1. **Atualize os pacotes do sistema:**
+   ```bash
+   sudo apt update && sudo apt upgrade -y
+   ```
+
+2. **Instale o PostgreSQL:**
+   ```bash
+   sudo apt install postgresql postgresql-contrib -y
+   ```
+
+#### **Windows:**
+1. **Baixe e instale o PostgreSQL:**
+   - Acesse [PostgreSQL Downloads](https://www.postgresql.org/download/windows/).
+   - Baixe a versão compatível com seu sistema e siga o instalador.
+   
+2. **Durante a instalação:**
+   - Escolha um diretório de instalação.
+   - Defina a senha do usuário `postgres` (guarde essa senha).
+
+### **2. Inicializar e Iniciar o PostgreSQL**
+
+#### **Linux:**
+1. **Inicie o serviço PostgreSQL:**
+   ```bash
+   sudo service postgresql start
+   ```
+
+2. **Verifique o status do serviço:**
+   ```bash
+   sudo service postgresql status
+   ```
+
+#### **Windows:**
+1. O serviço do PostgreSQL é iniciado automaticamente após a instalação. Para garantir:
+   - Pressione `Win + R`, digite `services.msc` e procure por `PostgreSQL`.
+   - Clique com o botão direito e selecione **Iniciar** se não estiver ativo.
+
+### **3. Acessar o Shell do PostgreSQL (psql)**
+
+#### **Linux:**
+1. **Acesse o `psql` como usuário `postgres`:**
+   ```bash
+   sudo -u postgres psql
+   ```
+
+#### **Windows:**
+1. **Abra o `psql` através do menu iniciar:**
+   - Vá até **Iniciar → PostgreSQL → SQL Shell (psql)**.
+2. **Insira os seguintes detalhes:**
+   - **Servidor:** `localhost`
+   - **Porta:** `5432`
+   - **Usuário:** `postgres`
+   - **Senha:** insira a senha definida durante a instalação.
+
+### **4. Criar um Banco de Dados**
+
+1. **No shell `psql`, crie um banco de dados:**
+   ```sql
+   CREATE DATABASE gceu;
+   ```
+
+2. **Conecte-se ao banco de dados recém-criado:**
+   ```sql
+   \c gceu
+   ```
+
+### **5. Criar Usuário e Conceder Privilégios (Opcional)**
+
+1. **Crie um usuário com nome e senha personalizados:**
+   ```sql
+   CREATE USER gceu WITH PASSWORD 'minhasenha';
+   ```
+
+2. **Conceda privilégios ao usuário no banco criado:**
+   ```sql
+   GRANT ALL PRIVILEGES ON DATABASE gceu TO gceu;
+   ```
+
+### **6. Criar Tabelas e Inserir Dados**
+
+1. **Exemplo de criação de uma tabela `gceus`:**
+   ```sql
+   CREATE TABLE gceus (
+     id SERIAL PRIMARY KEY,
+     nome VARCHAR(255) NOT NULL,
+     endereco VARCHAR(255) NOT NULL,
+     hora TIME,
+     descricao TEXT,
+     data_inicio DATE
+   );
+   ```
+
+2. **Inserir dados de exemplo:**
+   ```sql
+   INSERT INTO gceus (nome, endereco, hora, descricao, data_inicio)
+   VALUES ('GCEU Central', 'Rua Exemplo, 123', '14:00', 'Descrição do GCEU', '2024-11-27');
+   ```
+
+### **7. Parar o Servidor PostgreSQL**
+
+#### **Linux:**
+1. **Parar o serviço PostgreSQL:**
+   ```bash
+   sudo service postgresql stop
+   ```
+
+#### **Windows:**
+1. **Parar o serviço manualmente:**
+   - Pressione `Win + R`, digite `services.msc` e encontre `PostgreSQL`.
+   - Clique com o botão direito e selecione **Parar**.
+
+### **8. Dicas**
+
+- **Linux:** Adicione o comando de inicialização ao `.bashrc` ou `.zshrc` para iniciar automaticamente o PostgreSQL:
+   ```bash
+   sudo service postgresql start
+   ```
+
+- **Windows:** O PostgreSQL inicia automaticamente com o sistema, mas pode ser gerenciado manualmente pelo **Gerenciador de Serviços**.
 
 ---
 

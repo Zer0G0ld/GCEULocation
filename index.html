@@ -3,95 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Mapa interativo dos GCEUs da Igreja IMW Gericinó. Encontre os locais disponíveis e adicione novos GCEUs.">
-  <meta name="keywords" content="GCEU, IMW Gericinó, Igreja, Mapa, Localização, Comunidade">
-  <meta name="author" content="Organização XYZ">
-  <title>Mapa Interativo - GCEU IMW Gericinó</title>
-  <link rel="icon" href="frontend/img/logoIMG.png" type="image/png">
-  <link rel="stylesheet" href="styles.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" defer></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
-  <script src="script.js" defer></script>
+  <meta http-equiv="refresh" content="0;url=/frontend/index.html">
+  <title>GCEULocation</title>
 </head>
 <body>
-  <header class="bg-dark text-white py-3 fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark container">
-      <a class="navbar-brand" href="#">GCEU IMW</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Alternar navegação">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-          <li class="nav-item"><a class="nav-link" href="#disponibilidadeGCEU" aria-label="GCEUs Disponíveis">GCEUs Disponíveis</a></li>
-          <li class="nav-item"><a class="nav-link" href="#mapSection" aria-label="Localizações">Localizações</a></li>
-          <li class="nav-item"><a class="nav-link" href="#sobreIgreja" aria-label="Sobre a Igreja">Sobre a Igreja</a></li>
-          <li class="nav-item"><a class="nav-link" href="#adicionarGCEU" aria-label="Adicionar GCEU">Adicionar GCEU</a></li>
-        </ul>
-      </div>
-    </nav>
-  </header>
-
-  <main class="container mt-5 pt-5">
-    <h1 class="text-center mb-4">Mapa Interativo dos GCEUs - IMW Gericinó</h1>
-    
-    <section id="mapSection" class="mb-5">
-      <h2 class="mb-3">Mapa de Localização</h2>
-      <div id="map" class="border rounded" style="height: 400px; width:100%;"></div>
-    </section>
-
-    <section id="sobreIgreja" class="mb-5">
-      <h2>Sobre a IMW Gericinó</h2>
-      <p>...</p>
-    </section>
-
-    <section id="disponibilidadeGCEU" class="mb-5">
-      <h2 class="mb-3">Disponibilidade dos GCEUs</h2>
-      <table class="table table-striped">
-        <thead class="table-dark">
-          <tr><th>GCEU</th><th>Disponibilidade</th></tr>
-        </thead>
-        <tbody id="tabelaGCEUs"></tbody>
-      </table>
-    </section>
-
-    <section id="adicionarGCEU" class="mb-5">
-      <h2 class="mb-3">Adicionar Novo GCEU</h2>
-      <form id="formAdicionarGCEU" class="row g-3">
-        <div class="col-md-6">
-          <label for="nomeGCEUAdicionar" class="form-label">Nome do GCEU</label>
-          <input type="text" id="nomeGCEUAdicionar" class="form-control" placeholder="Nome do GCEU" required>
-        </div>
-        <div class="col-md-6">
-          <label for="enderecoGCEUAdicionar" class="form-label">Endereço do GCEU</label>
-          <input type="text" id="enderecoGCEUAdicionar" class="form-control" placeholder="Endereço do GCEU" required>
-        </div>
-        <div class="col-md-6">
-          <label for="horaGCEUAdicionar" class="form-label">Hora do GCEU</label>
-          <input type="text" id="horaGCEUAdicionar" class="form-control" placeholder="Hora do GCEU" required>
-        </div>
-        <div class="col-md-6">
-          <label for="descricaoGCEUAdicionar" class="form-label">Descrição do GCEU</label>
-          <input type="text" id="descricaoGCEUAdicionar" class="form-control" placeholder="Descrição do GCEU" required>
-        </div>
-        <div class="col-md-6">
-          <label for="dataInicioGCEUAdicionar" class="form-label">Data de Início do GCEU</label>
-          <input type="date" id="dataInicioGCEUAdicionar" class="form-control" required>
-        </div>
-    
-        <div class="col-12">
-          <button type="submit" class="btn btn-primary">Salvar</button>
-          <button type="button" id="removerGCEU" class="btn btn-danger">Remover GCEU</button>
-        </div>
-      </form>
-    </section>
-    
-  </main>
-
-  <footer class="bg-dark text-white text-center py-3">
-    <p>&copy; 2024 GCEU - Todos os direitos reservados.</p>
-  </footer>
+  <p>Se você não for redirecionado automaticamente, <a href="/frontend/index.html">clique aqui</a>.</p>
 </body>
 </html>
