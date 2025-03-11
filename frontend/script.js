@@ -1,12 +1,12 @@
 const GCEUApp = {
   map: null,
-  
+
   // Inicializa o mapa
   async initMap() {
     if (!this.map) {
       const igrejaLocation = [-22.857411, -43.446856]; // Coordenadas da igreja
       this.map = L.map("map").setView(igrejaLocation, 15);
-      
+
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         maxZoom: 19,
         attribution: "© OpenStreetMap contributors",
@@ -19,10 +19,39 @@ const GCEUApp = {
     }
   },
 
+  async buscarEnderecoPorCEP(cep) {
+    if (cep.length !== 8) return; // O CEP deve ter 8 dígitos numéricos
+
+    const url = `https://viacep.com.br/ws/${cep}/json/`;
+
+    try {
+      const response = await fetch(url);
+      const data = await response.json();
+
+      if (data.erro) {
+        alert("CEP não encontrado!");
+        return;
+      }
+
+      document.getElementById("enderecoGCEUAdicionar").value = data.logradouro;
+      document.getElementById("complementoGCEUAdicionar").value = data.complemento || "";
+    } catch (error) {
+      console.error("Erro ao buscar endereço pelo CEP:", error);
+    }
+  },
+
+  // Adiciona evento para buscar endereço ao inserir o CEP
+  initCEPListener() {
+    document.getElementById("cepGCEUAdicionar").addEventListener("blur", function () {
+      const cep = this.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+      GCEUApp.buscarEnderecoPorCEP(cep);
+    });
+  },
+
   // Busca coordenadas do endereço
   async geocodeEndereco(endereco) {
     const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(endereco)}`;
-    
+
     try {
       const response = await fetch(url, {
         headers: {
@@ -52,7 +81,14 @@ const GCEUApp = {
     if (!localizacao) return;
 
     const marcador = L.marker([localizacao.lat, localizacao.lon]).addTo(this.map);
-    marcador.bindPopup(`<b>${gceu.nome}</b><br>${gceu.endereco}<br>Líder: ${gceu.lider}`).openPopup();
+    marcador.bindPopup(`
+      <b>${gceu.nome}</b><br>
+      ${gceu.endereco}<br>
+      Líder: ${gceu.lider}<br>
+      Horário: ${gceu.hora}<br>
+      <button class="btn btn-warning btn-sm" onclick="GCEUApp.editarGCEU('${gceu._id}')">Editar</button>
+      <button class="btn btn-danger btn-sm" onclick="GCEUApp.deletarGCEU('${gceu._id}')">Deletar</button>
+    `).openPopup();
   },
 
   // Obtém todos os GCEUs do backend
@@ -75,7 +111,15 @@ const GCEUApp = {
   adicionarGCEUTabela(gceu) {
     const tabela = document.getElementById("tabelaGCEUs");
     const novaLinha = document.createElement("tr");
-    novaLinha.innerHTML = `<td>${gceu.nome}</td><td>Disponível</td>`;
+    novaLinha.setAttribute("data-id", gceu._id);
+    novaLinha.innerHTML = `
+      <td>${gceu.nome}</td>
+      <td>Disponível</td>
+      <td>
+        <button class="btn btn-warning btn-sm" onclick="GCEUApp.editarGCEU('${gceu._id}')">Editar</button>
+        <button class="btn btn-danger btn-sm" onclick="GCEUApp.deletarGCEU('${gceu._id}')">Deletar</button>
+      </td>
+    `;
     tabela.appendChild(novaLinha);
   },
 
@@ -83,13 +127,24 @@ const GCEUApp = {
   async adicionarGCEU(event) {
     event.preventDefault();
 
+    const endereco = document.getElementById("enderecoGCEUAdicionar").value;
     const gceu = {
       nome: document.getElementById("nomeGCEUAdicionar").value,
+      cep: document.getElementById("cepGCEUAdicionar").value,
       endereco: document.getElementById("enderecoGCEUAdicionar").value,
+      numero: document.getElementById("numeroGCEUAdicionar").value,
+      complemento: document.getElementById("complementoGCEUAdicionar").value,
       hora: document.getElementById("horaGCEUAdicionar").value,
       descricao: document.getElementById("descricaoGCEUAdicionar").value,
-      dataInicio: document.getElementById("dataInicioGCEUAdicionar").value,
+      diaSemana: document.getElementById("diaSemanaGCEUAdicionar").value,
+      lider: document.getElementById("adicionarLider").value,
     };
+
+    const localizacao = await this.geocodeEndereco(endereco);
+    if (!localizacao) return;
+
+    gceu.latitude = localizacao.lat;
+    gceu.longitude = localizacao.lon;
 
     try {
       const response = await fetch("http://localhost:3000/gceus", {
@@ -114,10 +169,36 @@ const GCEUApp = {
   async init() {
     await this.initMap();
     await this.carregarGCEUs();
+    this.initCEPListener();
 
     document.getElementById("formAdicionarGCEU").addEventListener("submit", (event) => this.adicionarGCEU(event));
+  },
+
+  editarGCEU(id) {
+    const gceu = this.gceus.find(g => g._id === id);
+    if (!gceu) return;
+
+    document.getElementById("nomeGCEUAdicionar").value = gceu.nome;
+    document.getElementById("enderecoGCEUAdicionar").value = gceu.endereco;
+    document.getElementById("horaGCEUAdicionar").value = gceu.hora;
+    document.getElementById("descricaoGCEUAdicionar").value = gceu.descricao;
+    document.getElementById("diaSemanaGCEUAdicionar").value = gceu.diaSemana;
+    document.getElementById("adicionarLider").value = gceu.lider;
+
+    const button = document.querySelector("#formAdicionarGCEU button[type='submit']");
+    button.innerHTML = "<i class='fa fa-edit'></i> Atualizar";
+    button.onclick = () => this.atualizarGCEU(id);
   }
 };
 
-// Inicia a aplicação
-GCEUApp.init();
+// document.addEventListener("DOMContentLoaded", () => {
+//  GCEUApp.init();
+// });
+document.addEventListener("DOMContentLoaded", function () {
+  GCEUApp.init();
+  document.getElementById("igreja").value = "IMW Gericinó";
+  if (igrejaSelect.options.length > 0) {
+    igrejaSelect.selectedIndex = 0; // Seleciona a primeira opção
+  }
+  
+});
